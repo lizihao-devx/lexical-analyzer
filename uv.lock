@@ -121,14 +121,16 @@ wheels = [
 [[package]]
 name = "lexical-analyzer"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
+    { name = "hf-xet" },
     { name = "ltp" },
     { name = "tokenizers" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "hf-xet", specifier = ">=1.2.0" },
     { name = "ltp", specifier = ">=4.2.14" },
     { name = "tokenizers", specifier = ">=0.11.0" },
 ]
