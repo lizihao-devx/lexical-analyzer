@@ -1,0 +1,10 @@
+[project]
+name = "lexical-analyzer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10, <3.11"
+dependencies = [
+    "ltp>=4.2.14",
+    "tokenizers>=0.11.0",
+]
