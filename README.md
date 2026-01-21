@@ -28,7 +28,7 @@ uv sync
 ```
 ### 2.本地安装包
 ```bash
-uv pip install -e.
+uv pip install -e .
 ```
 ### 3.使用命令行工具
 ```bash
