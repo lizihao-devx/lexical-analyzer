@@ -20,3 +20,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/lexical_analyzer"]
+
+[project.scripts]
+lexical-analyzer = "lexical_analyzer.cli:main"
