@@ -52,23 +52,23 @@ lexical-analyzer/
 ├── pyproject.toml
 ├── src/
 │   ├── lexical_analyzer/
-│   │   ├── analyzer.py        # 核心分析流程
-│   │   ├── tokenizer.py       # LTP 分词与词性标注
-│   │   ├── token.py           # Token 数据结构
-│   │   ├── result.py          # AnalysisResult 输出模型
-│   │   ├── pos.py             # 统一词性枚举定义
-│   │   ├── pos_mapper.py      # 外部词性 → 内部词性映射
-│   │   ├── load_config.py     # 加载停用词 / 黑白名单
+│   │   ├── analyzer.py          # 核心分析流程
+│   │   ├── tokenizer.py         # LTP 分词与词性标注
+│   │   ├── token.py             # Token 数据结构
+│   │   ├── result.py            # AnalysisResult 输出模型
+│   │   ├── pos.py               # 统一词性枚举定义
+│   │   ├── pos_mapper.py        # 外部词性 → 内部词性映射
 │   │   ├── io/
-│   │   │   └── data_loader.py # 文本加载工具
-│   │   └── cli.py             # 命令行工具入口
+│   │   │   ├── config_loader.py # 加载停用词 / 黑白名单
+│   │   │   └── data_loader.py   # 文本加载工具
+│   │   └── cli.py               # 命令行工具入口
 │   ├── tests/
 ├── resources/
 │   ├── stopwords.txt
 │   ├── pos_whitelist.txt
 │   └── pos_blacklist.txt
 ├── scripts/
-│   └── main.py                # 示例入口
+│   └── main.py                  # 示例入口
 ├── data/
 ├── pyproject.toml
 ├── .python-version
