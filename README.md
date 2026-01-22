@@ -42,12 +42,12 @@ lexical-analyzer --help
 lexical-analyzer data/sample.txt --device cuda --stopwords resources/stopwords.txt --backlist resources/pos_blacklist.txt --topk 5 --out result.csv
 ```
 参数说明：
+- `--device`：指定模型运行硬件（cuda或cpu），默认（留空）则优先尝试cuda
 - `--stopwords`：停用词文件路径
 - `--whitelist`：词性白名单文件路径，默认（留空）为resources/pos_whitelist.txt
 - `--backlist`：词性黑名单文件路径，默认（留空）为resources/pos_blacklist.txt
 - `--topk`：输出前K个高频词，默认（留空）输出全部
 - `--out`：导出到csv文件名，默认（留空）输出到终端
-- `--device`：指定模型运行硬件（cuda或cpu），默认（留空）则优先尝试cuda
 
 ## 文件结构
 ```
