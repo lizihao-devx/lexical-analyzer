@@ -1,6 +1,6 @@
 import argparse
 import csv
-from lexical_analyzer.tokenizer_ltp import LTPTokenizer
+from lexical_analyzer.ltp_tokenizer import LTPTokenizer
 from lexical_analyzer.analyzer import LexicalAnalyzer
 from lexical_analyzer.io.data_loader import TextLoader
 from lexical_analyzer.io.config_loader import config_loader
@@ -15,6 +15,7 @@ def main():
     parser.add_argument("--blacklist", type=str, default="resources/pos_blacklist.txt", help="Path to POS blacklist file")
     parser.add_argument("--topk", type=int, default=None, help="Show top k frequent words per POS (default: all)")
     parser.add_argument("--out", type=str, default="", help="Output CSV file path")
+    parser.add_argument("--device", type=str, choices=["cpu", "cuda"], default=None, help="Device to run LTP on (e.g., 'cpu' or 'cuda'; default: auto)")
 
     args = parser.parse_args()
 
@@ -23,7 +24,7 @@ def main():
     pos_whitelist = config_loader(args.whitelist) if args.whitelist else set()
     pos_blacklist = config_loader(args.blacklist) if args.blacklist else set()
 
-    tokenizer = LTPTokenizer()
+    tokenizer = LTPTokenizer(device=args.device)
     analyzer = LexicalAnalyzer(tokenizer, stopwords, pos_whitelist, pos_blacklist)
 
     result = analyzer.analyze(text)

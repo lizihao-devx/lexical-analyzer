@@ -1,5 +1,5 @@
 from enum import Enum
-from lexical_analyzer.tokenizer_ltp import LTPTokenizer
+from lexical_analyzer.ltp_tokenizer import LTPTokenizer
 from lexical_analyzer.analyzer import LexicalAnalyzer
 from lexical_analyzer.io.data_loader import TextLoader
 from lexical_analyzer.io.config_loader import config_loader

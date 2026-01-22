@@ -16,9 +16,11 @@
 
 规划中
 - `json`格式输出
-- 接入`jieba`分词供选择
+- 支持自定义词典
 
 ## 使用方法
+
+⚠️ 目前需要在uv创建的虚拟环境中使用
 
 ### 1.安装依赖
 
@@ -35,8 +37,9 @@ uv pip install -e .
 lexical-analyzer --help
 ```
 ### 4.使用示例
+
 ```bash
-lexical-analyzer data/sample.txt --stopwords resources/stopwords.txt --backlist resources/pos_blacklist.txt --topk 5 --out result.csv
+lexical-analyzer data/sample.txt --device cuda --stopwords resources/stopwords.txt --backlist resources/pos_blacklist.txt --topk 5 --out result.csv
 ```
 参数说明：
 - `--stopwords`：停用词文件路径
@@ -44,6 +47,7 @@ lexical-analyzer data/sample.txt --stopwords resources/stopwords.txt --backlist 
 - `--backlist`：词性黑名单文件路径，默认（留空）为resources/pos_blacklist.txt
 - `--topk`：输出前K个高频词，默认（留空）输出全部
 - `--out`：导出到csv文件名，默认（留空）输出到终端
+- `--device`：指定模型运行硬件（cuda或cpu），默认（留空）则优先尝试cuda
 
 ## 文件结构
 ```
