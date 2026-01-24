@@ -11,7 +11,13 @@ class LTPTokenizer:
         - 为每个词语标注词性（POS）
     """
 
-    def __init__(self, model_name: str | None = None, device: str | None = None):
+    def __init__(
+            self,
+            model_name: str | None = None,
+            device: str | None = None,
+            user_dict: str | None = None,
+            default_freq: int = 2
+            ):
         """
         初始化 LTP 模型实例（重量级对象，建议全生命周期仅初始化一次）
 
@@ -35,6 +41,9 @@ class LTPTokenizer:
         else:
             raise ValueError(f"Unknown device: {device}")
         
+        if user_dict:
+            self._load_user_dict(user_dict, default_freq)
+        
         # 根据设备迁移模型
         if use_cuda:
             self._ltp.to("cuda")
@@ -43,6 +52,29 @@ class LTPTokenizer:
             self.device = "cpu"
 
         print((f"[INFO] LTP initialized, torch device = {self.device}"))
+
+    def _load_user_dict(self, path: str, default_freq: int):
+        """
+        从文件加载用户自定义词典
+        格式：词语 权重（默认2）
+             词语一
+             词语二 3
+             词语三 5
+        """
+        count = 0
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                parts = line.split()
+                word = parts[0]
+                freq = int(parts[1]) if len(parts) > 1 else default_freq
+
+                self._ltp.add_words(word, freq)
+                count += 1
+
+        print(f"[INFO] Loaded {count} words from user dictionary: {path}")
 
     def tokenize(self, text: str) -> List[Tuple[str, str]]:
         """

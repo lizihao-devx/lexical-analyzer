@@ -16,6 +16,7 @@ def main():
     parser.add_argument("--topk", type=int, default=None, help="Show top k frequent words per POS (default: all)")
     parser.add_argument("--out", type=str, default="", help="Output CSV file path")
     parser.add_argument("--device", type=str, choices=["cpu", "cuda"], default=None, help="Device to run LTP on (e.g., 'cpu' or 'cuda'; default: auto)")
+    parser.add_argument("--dict", type=str, default="resources/user_dict.txt", help="Path to user-defined dictionary file (word [freq])")
 
     args = parser.parse_args()
 
@@ -24,7 +25,7 @@ def main():
     pos_whitelist = config_loader(args.whitelist) if args.whitelist else set()
     pos_blacklist = config_loader(args.blacklist) if args.blacklist else set()
 
-    tokenizer = LTPTokenizer(device=args.device)
+    tokenizer = LTPTokenizer(device=args.device, user_dict=args.dict)
     analyzer = LexicalAnalyzer(tokenizer, stopwords, pos_whitelist, pos_blacklist)
 
     result = analyzer.analyze(text)

@@ -13,10 +13,10 @@
 - 词性黑白名单
 - 按词性分组统计词频
 - 按词性输出前K个高频词（自定义个数）
+- 支持用户自定义词典，模型按词典内容增加权重
 
 规划中
 - `json`格式输出
-- 支持自定义词典
 
 ## 使用方法
 
@@ -43,9 +43,10 @@ lexical-analyzer data/sample.txt --device cuda --stopwords resources/stopwords.t
 ```
 参数说明：
 - `--device`：指定模型运行硬件（cuda或cpu），默认（留空）则优先尝试cuda
-- `--stopwords`：停用词文件路径
-- `--whitelist`：词性白名单文件路径，默认（留空）为resources/pos_whitelist.txt
-- `--backlist`：词性黑名单文件路径，默认（留空）为resources/pos_blacklist.txt
+- `--stopwords`：停用词文件路径, 默认（留空）为`resources/stopwords.txt`
+- `--whitelist`：词性白名单文件路径，默认（留空）为`resources/pos_whitelist.txt`
+- `--backlist`：词性黑名单文件路径，默认（留空）为`resources/pos_blacklist.txt`
+- `--dict`：自定义词典文件路径，默认（留空）为`resources/user_dict.txt`
 - `--topk`：输出前K个高频词，默认（留空）输出全部
 - `--out`：导出到csv文件名，默认（留空）输出到终端
 
