@@ -14,7 +14,7 @@ def main():
     parser.add_argument("--whitelist", type=str, default="resources/pos_whitelist.txt", help="Path to POS whitelist file")
     parser.add_argument("--blacklist", type=str, default="resources/pos_blacklist.txt", help="Path to POS blacklist file")
     parser.add_argument("--topk", type=int, default=None, help="Show top k frequent words per POS (default: all)")
-    parser.add_argument("--out", type=str, default="", help="Output CSV file path")
+    parser.add_argument("--out", nargs="?", const="output/result.csv", default=None, help="Output CSV file. If used without a value, defaults to 'output/result.csv'")
     parser.add_argument("--device", type=str, choices=["cpu", "cuda"], default=None, help="Device to run LTP on (e.g., 'cpu' or 'cuda'; default: auto)")
     parser.add_argument("--dict", type=str, default="resources/user_dict.txt", help="Path to user-defined dictionary file (word [freq])")
 
@@ -32,9 +32,10 @@ def main():
     top_words = result.top_k(args.topk)
 
     # 打印到终端
-    for pos, items in top_words.items():
-        pos_str = pos.value if hasattr(pos, "value") else str(pos)
-        print(f"{pos_str}: {items}")
+    if not args.out:
+        for pos, items in top_words.items():
+            pos_str = pos.value if hasattr(pos, "value") else str(pos)
+            print(f"{pos_str}: {items}")
 
     # 输出 CSV
     if args.out:
