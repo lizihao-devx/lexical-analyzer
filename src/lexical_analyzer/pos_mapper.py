@@ -52,3 +52,44 @@ def normalize_pos(raw_pos: str) -> NormalizedPOS:
         return NormalizedPOS.OTHER
 
     return LTP_POS_MAP.get(raw_pos, NormalizedPOS.OTHER)
+
+class RawPOSMapper:
+    """保留LTP原始词性全称"""
+    # LTP官方词性对照表
+    RAW_POS_DICT = {
+        "a": "adjective",
+        "ni": "organization name",
+        "b": "other noun-modifier",
+        "nl": "location noun",
+        "c": "conjunction",
+        "ns": "geographical name",
+        "d": "adverb",
+        "nt": "temporal noun",
+        "e": "exclamation",
+        "nz": "other proper noun",
+        "g": "morpheme",
+        "o": "onomatopoeia",
+        "h": "prefix",
+        "p": "preposition",
+        "i": "idiom",
+        "q": "quantity",
+        "j": "abbreviation",
+        "r": "pronoun",
+        "k": "suffix",
+        "u": "auxiliary",
+        "m": "number",
+        "v": "verb",
+        "n": "general noun",
+        "wp": "punctuation",
+        "nd": "direction noun",
+        "ws": "foreign words",
+        "nh": "person name",
+        "x": "non-lexeme",
+        "z": "descriptive words",
+    }
+
+    @staticmethod # 
+    def map(raw_pos: str):
+        if not raw_pos:
+            return "other"
+        return RawPOSMapper.RAW_POS_DICT.get(raw_pos, "other")

@@ -12,12 +12,12 @@ class LexicalAnalyzer:
         - 按词性分组
         - 统计每个词性的词频和高频词
     """
-    def __init__(self, tokenizer, stopwords=None, pos_whitelist=None, pos_blacklist=None):
+    def __init__(self, tokenizer, stopwords=None, pos_whitelist=None, pos_blacklist=None, pos_mapper=None):
         self.tokenizer = tokenizer
         self.stopwords = stopwords or set()
         self.pos_whitelist = pos_whitelist or set()
         self.pos_blacklist = pos_blacklist or set()
-    
+        self.pos_mapper = pos_mapper or normalize_pos
     def analyze(
         self, 
         text: str,
@@ -46,7 +46,7 @@ class LexicalAnalyzer:
     
     def _pos_process(self, tokens: Iterable[Token]) -> List[Token]:
         
-        return [replace(token, pos=normalize_pos(token.pos)) for token in tokens]
+        return [replace(token, pos=self.pos_mapper(token.pos)) for token in tokens]
     
     def _build_result(self, tokens: List[Token]) -> AnalysisResult:
         

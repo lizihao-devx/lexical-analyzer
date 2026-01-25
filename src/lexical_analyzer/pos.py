@@ -16,3 +16,11 @@ class NormalizedPOS(str, Enum):
     QTY = "qty"       # 量词（个、次、回）
     PUNCT = "punct"
     OTHER = "other"
+
+class RawPOS(str, Enum):
+    generalNoun = "generalNoun"
+    personName = "personName"
+    directorName = "directorName"
+    locationNoun = "locationNoun"
+    organizationName = "organizationName"
+    geographicalName = "geographicalName"

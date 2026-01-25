@@ -4,7 +4,7 @@ from lexical_analyzer.ltp_tokenizer import LTPTokenizer
 from lexical_analyzer.analyzer import LexicalAnalyzer
 from lexical_analyzer.io.data_loader import TextLoader
 from lexical_analyzer.io.config_loader import config_loader
-
+from lexical_analyzer.pos_mapper import normalize_pos, RawPOSMapper
 def main():
     parser = argparse.ArgumentParser(
         description="Lexical Analyzer - Chinese text word/pos frequency analysis"
@@ -17,8 +17,14 @@ def main():
     parser.add_argument("--out", nargs="?", const="output/result.csv", default=None, help="Output CSV file. If used without a value, defaults to 'output/result.csv'")
     parser.add_argument("--device", type=str, choices=["cpu", "cuda"], default=None, help="Device to run LTP on (e.g., 'cpu' or 'cuda'; default: auto)")
     parser.add_argument("--dict", type=str, default="resources/user_dict.txt", help="Path to user-defined dictionary file (word [freq])")
+    parser.add_argument("--rawpos",action="store_true", help="Set to output original POS tags from LTP")
 
     args = parser.parse_args()
+
+    if args.rawpos:
+        pos_mapper = RawPOSMapper().map
+    else:
+        pos_mapper = normalize_pos
 
     text = TextLoader.load_from_file(args.file)
     stopwords = config_loader(args.stopwords) if args.stopwords else set()
@@ -26,7 +32,7 @@ def main():
     pos_blacklist = config_loader(args.blacklist) if args.blacklist else set()
 
     tokenizer = LTPTokenizer(device=args.device, user_dict=args.dict)
-    analyzer = LexicalAnalyzer(tokenizer, stopwords, pos_whitelist, pos_blacklist)
+    analyzer = LexicalAnalyzer(tokenizer, stopwords, pos_whitelist, pos_blacklist, pos_mapper=pos_mapper)
 
     result = analyzer.analyze(text)
     top_words = result.top_k(args.topk)
