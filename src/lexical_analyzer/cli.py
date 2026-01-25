@@ -5,7 +5,8 @@ from lexical_analyzer.analyzer import LexicalAnalyzer
 from lexical_analyzer.io.data_loader import TextLoader
 from lexical_analyzer.io.config_loader import config_loader
 from lexical_analyzer.pos_mapper import normalize_pos, RawPOSMapper
-def main():
+
+def parse_args():
     parser = argparse.ArgumentParser(
         description="Lexical Analyzer - Chinese text word/pos frequency analysis"
     )
@@ -19,24 +20,17 @@ def main():
     parser.add_argument("--dict", type=str, default="resources/user_dict.txt", help="Path to user-defined dictionary file (word [freq])")
     parser.add_argument("--rawpos",action="store_true", help="Set to output original POS tags from LTP")
 
-    args = parser.parse_args()
+    return parser.parse_args()
 
+def pos_mode(args):
     if args.rawpos:
         pos_mapper = RawPOSMapper().map
     else:
         pos_mapper = normalize_pos
+    return pos_mapper
 
-    text = TextLoader.load_from_file(args.file)
-    stopwords = config_loader(args.stopwords) if args.stopwords else set()
-    pos_whitelist = config_loader(args.whitelist) if args.whitelist else set()
-    pos_blacklist = config_loader(args.blacklist) if args.blacklist else set()
 
-    tokenizer = LTPTokenizer(device=args.device, user_dict=args.dict)
-    analyzer = LexicalAnalyzer(tokenizer, stopwords, pos_whitelist, pos_blacklist, pos_mapper=pos_mapper)
-
-    result = analyzer.analyze(text)
-    top_words = result.top_k(args.topk)
-
+def output(args, top_words):
     # 打印到终端
     if not args.out:
         for pos, items in top_words.items():
@@ -53,3 +47,21 @@ def main():
                 for word, freq in items:
                     writer.writerow([pos_str, word, freq])
         print(f"分析结果已保存到 {args.out}")
+
+def main():
+    args = parse_args()
+
+    pos_mapper = pos_mode(args)
+
+    text = TextLoader.load_from_file(args.file)
+    stopwords = config_loader(args.stopwords) if args.stopwords else set()
+    pos_whitelist = config_loader(args.whitelist) if args.whitelist else set()
+    pos_blacklist = config_loader(args.blacklist) if args.blacklist else set()
+
+    tokenizer = LTPTokenizer(device=args.device, user_dict=args.dict)
+    analyzer = LexicalAnalyzer(tokenizer, stopwords, pos_whitelist, pos_blacklist, pos_mapper=pos_mapper)
+
+    result = analyzer.analyze(text)
+    top_words = result.top_k(args.topk)
+
+    output(args, top_words)
