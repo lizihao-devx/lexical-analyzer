@@ -65,3 +65,6 @@ def main():
     top_words = result.top_k(args.topk)
 
     output(args, top_words)
+
+if __name__ == "__main__":
+    main()
