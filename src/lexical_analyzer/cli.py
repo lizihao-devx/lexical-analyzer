@@ -5,6 +5,7 @@ from lexical_analyzer.analyzer import LexicalAnalyzer
 from lexical_analyzer.io.data_loader import TextLoader
 from lexical_analyzer.io.config_loader import config_loader
 from lexical_analyzer.pos_mapper import normalize_pos, RawPOSMapper
+from lexical_analyzer.export_wordcloud import WordCloudExporter
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -19,6 +20,8 @@ def parse_args():
     parser.add_argument("--device", type=str, choices=["cpu", "cuda"], default=None, help="Device to run LTP on (e.g., 'cpu' or 'cuda'; default: auto)")
     parser.add_argument("--dict", type=str, default="resources/user_dict.txt", help="Path to user-defined dictionary file (word [freq])")
     parser.add_argument("--rawpos",action="store_true", help="Set to output original POS tags from LTP")
+    parser.add_argument("--wordcloud", nargs="?", const="output/wordcloud.png", default=None, help="Generate word cloud image. Optinal output path.")
+    parser.add_argument("--wordcloud_pos", type=str, default=None, help="Generate word cloud for a specific POS (e.g. noun, verb)")
 
     return parser.parse_args()
 
@@ -48,6 +51,23 @@ def output(args, top_words):
                     writer.writerow([pos_str, word, freq])
         print(f"分析结果已保存到 {args.out}")
 
+def maybe_generate_wordcloud(args, result):
+    if not args.wordcloud:
+        return
+
+    exporter = WordCloudExporter(
+        font_path="resources/fonts/SourceHanSansCN-Regular.otf"
+    )
+
+    exporter.export(
+        result=result,
+        out_path=args.wordcloud,
+        pos=args.wordcloud_pos
+    )
+
+    print(f"[INFO] Word cloud saved to {args.wordcloud}")
+
+
 def main():
     args = parse_args()
 
@@ -65,6 +85,9 @@ def main():
     top_words = result.top_k(args.topk)
 
     output(args, top_words)
+
+    maybe_generate_wordcloud(args, result)
+
 
 if __name__ == "__main__":
     main()

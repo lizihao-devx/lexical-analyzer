@@ -7,9 +7,12 @@ requires-python = ">=3.10, <3.11"
 dependencies = [
     "hf-xet>=1.2.0",
     "ltp>=4.2.14",
+    "matplotlib>=3.10.8",
+    "pillow>=12.1.0",
     "tokenizers>=0.11.0",
     "torch>=2.9.1",
     "torchvision>=0.24.1",
+    "wordcloud>=1.9.6",
 ]
 
 [tool.uv.sources]
@@ -25,9 +28,9 @@ name = "pytorch-cu130"
 url = "https://download.pytorch.org/whl/cu130"
 explicit = true
 
-[[tool.uv.index]]
-name = "tuna"
-url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+#[[tool.uv.index]]
+#name = "tuna"
+#url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 
 [build-system]
 requires = ["hatchling"]
