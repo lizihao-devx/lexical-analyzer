@@ -14,6 +14,7 @@
 - 按词性分组统计词频
 - 按词性输出前K个高频词（自定义个数）
 - 支持用户自定义词典，模型按词典内容增加权重
+- 输出词云文件，支持单选词性
 
 规划中
 - `json`格式输出
@@ -39,9 +40,10 @@ lexical-analyzer --help
 ### 4.使用示例
 
 ```bash
-lexical-analyzer data/sample.txt --device cuda --stopwords resources/stopwords.txt --backlist resources/pos_blacklist.txt --topk 5 --out result.csv
+lexical-analyzer data/sample.txt --print --device cuda --stopwords resources/stopwords.txt --backlist resources/pos_blacklist.txt --topk 5 --out result.csv --wordcloud --wordcloud_pos noun
 ```
 参数说明：
+- `--print`：将结果打印到终端或命令行
 - `--device`：指定模型运行硬件（cuda或cpu），默认（留空）则优先尝试cuda
 - `--stopwords`：停用词文件路径, 默认（留空）为`resources/stopwords.txt`
 - `--whitelist`：词性白名单文件路径，默认（留空）为`resources/pos_whitelist.txt`
@@ -49,6 +51,8 @@ lexical-analyzer data/sample.txt --device cuda --stopwords resources/stopwords.t
 - `--dict`：自定义词典文件路径，默认（留空）为`resources/user_dict.txt`
 - `--topk`：输出前K个高频词，默认（留空）输出全部
 - `--out`：导出到csv文件名，默认（留空）输出到终端
+- `--wordcloud`：导出词云图片文件到`out/wordcloud.png`
+- `--wordcloud_pos`：指定词云内容的词性
 
 ## 文件结构
 ```
