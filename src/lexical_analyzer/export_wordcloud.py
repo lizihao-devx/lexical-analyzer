@@ -3,12 +3,27 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from lexical_analyzer.result import AnalysisResult
 
+def black_saturation_color_func(word, font_size, position, orientation, random_state=None, **kwargs):
+    """
+    频率高 → 更纯黑
+    频率低 → 偏灰
+    """
+    max_font = 100
+
+    ratio = min(font_size / max_font, 1.0)
+
+    # 从灰到黑
+    gray = int(180 - ratio * 180)
+    gray = max(gray, 0)
+
+    return f"rgb({gray}, {gray}, {gray})"
+
 class WordCloudExporter:
     def __init__(
         self,
-        font_path: str = "fonts/MSYH.TTC",
-        width: int = 800,
-        height: int = 600,
+        font_path = "fonts/MSYH.TTC",
+        width: int = 1280,
+        height: int = 960,
         background_color: str = "white",
     ):
         self.font_path = font_path
@@ -39,8 +54,13 @@ class WordCloudExporter:
             width=self.width,
             height=self.height,
             background_color=self.background_color,
+            # max_font_size=150,
+            prefer_horizontal=1.0,
+            color_func=black_saturation_color_func,
         )
         
+        # print("font_path =", repr(self.font_path))
+
         wc.generate_from_frequencies(freq_dict)
 
         out_path = Path(out_path)

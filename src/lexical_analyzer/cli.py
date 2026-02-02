@@ -15,6 +15,7 @@ def parse_args():
     parser.add_argument("--stopwords", type=str, default="resources/stopwords.txt", help="Path to stopwords file")
     parser.add_argument("--whitelist", type=str, default="resources/pos_whitelist.txt", help="Path to POS whitelist file")
     parser.add_argument("--blacklist", type=str, default="resources/pos_blacklist.txt", help="Path to POS blacklist file")
+    parser.add_argument("--print", action="store_true", help="Print analysis result to terminal")
     parser.add_argument("--topk", type=int, default=None, help="Show top k frequent words per POS (default: all)")
     parser.add_argument("--out", nargs="?", const="output/result.csv", default=None, help="Output CSV file. If used without a value, defaults to 'output/result.csv'")
     parser.add_argument("--device", type=str, choices=["cpu", "cuda"], default=None, help="Device to run LTP on (e.g., 'cpu' or 'cuda'; default: auto)")
@@ -35,7 +36,7 @@ def pos_mode(args):
 
 def output(args, top_words):
     # 打印到终端
-    if not args.out:
+    if args.print:
         for pos, items in top_words.items():
             pos_str = pos.value if hasattr(pos, "value") else str(pos)
             print(f"{pos_str}: {items}")
@@ -55,9 +56,7 @@ def maybe_generate_wordcloud(args, result):
     if not args.wordcloud:
         return
 
-    exporter = WordCloudExporter(
-        font_path="resources/fonts/SourceHanSansCN-Regular.otf"
-    )
+    exporter = WordCloudExporter()
 
     exporter.export(
         result=result,
