@@ -24,7 +24,7 @@ class WordCloudExporter:
     def __init__(
         self,
         font_path = "fonts/MSYH.TTC",
-        width: int = 960,
+        width: int = 1280,
         height: int = 960,
         background_color=None,
     ):
@@ -33,15 +33,19 @@ class WordCloudExporter:
         self.height = height
         self.background_color = background_color
 
-    def generate_circle_mask(self, size=960):
-        y, x = np.ogrid[:size, :size]
-        center = size // 2
-        radius = size // 2
+    def generate_circle_mask(self, height=960, width=1280):
+        y, x = np.ogrid[:height, :width]
+        center_x = width / 2
+        center_y = height / 2
 
-        circle = (x - center) ** 2 + (y - center) ** 2 > radius ** 2
+        a = width / 2
+        b = height / 2
+
+        ellipse = ((x - center_x) ** 2) / (a ** 2) + \
+                  ((y - center_y) ** 2) / (b ** 2) > 1
         
-        mask = np.zeros((size, size), dtype=np.uint8)
-        mask[circle] = 255
+        mask = np.zeros((height, width), dtype=np.uint8)
+        mask[ellipse] = 255
         
         return mask
     
@@ -117,7 +121,7 @@ class WordCloudExporter:
             mode='RGBA',
             mask=mask,
             prefer_horizontal=1.0,
-            color_func=black_saturation_color_func,
+            # color_func=black_saturation_color_func,
             # contour_width=2,
             # contour_color="black"
         )
